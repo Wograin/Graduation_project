@@ -17,9 +17,9 @@ window.addEventListener("DOMContentLoaded", () => {
         document.body.style.overflow = "";
     });
 
-    window.addEventListener('click', (event) => {
+    window.addEventListener("click", (event) => {
         if (event.target === popupEngineer) {
-            popupEngineer.style.display = 'none';
+            popupEngineer.style.display = "none";
             document.body.style.overflow = "";
         }
     });
