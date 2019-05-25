@@ -33,7 +33,7 @@ window.addEventListener("DOMContentLoaded", () => {
     });
 
     window.addEventListener("click", (event) => {
-        if (event.target === popupEngineer || event.target == popup) {
+        if (event.target === popupEngineer || event.target === popup) {
             popupEngineer.style.display = "none";
             popup.style.display = "none";
             document.body.style.overflow = "";
@@ -95,13 +95,14 @@ window.addEventListener("DOMContentLoaded", () => {
     }
     setTimer("timer", deadline);
 
-    //------------------TABs-----------------------------------------------------------------------------
+    //------------------TABs 1-----------------------------------------------------------------------------
+
     let glazingSlider = document.querySelector(".glazing_slider"),
-        tabs = document.querySelectorAll(".glazing_block"),
+        glazingBlockTabs = document.querySelectorAll(".glazing_block"),
         glazing = document.querySelectorAll(".glazing .row");
 
-    function hide(cnt) {
-        for (let i = cnt; i < glazing.length; i++) {
+    function hide(a) {
+        for (let i = a; i < glazing.length; i++) {
             glazing[i].style.display = "none";
         }
     }
@@ -116,8 +117,8 @@ window.addEventListener("DOMContentLoaded", () => {
         let target = event.target;
         while (target != this) {
             if (target.classList.contains("glazing_block")) {
-                for (let i = 0; i < tabs.length; i++) {
-                    if (target == tabs[i]) {
+                for (let i = 0; i < glazingBlockTabs.length; i++) {
+                    if (target == glazingBlockTabs[i]) {
                         hide(0);
                         show(i);
                         break;
@@ -128,14 +129,43 @@ window.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-   
+    //------------------TABs 2-----------------------------------------------------------------------------
 
+    let decorationSlider = document.querySelector(".decoration_slider"),    
+        decorationItemTabs = document.querySelectorAll(".no_click"),
+        decoration = document.querySelectorAll(".decoration .row .service");
 
+    console.log(decorationItemTabs);
 
+    function hideDecoration(a) {
+        for (let i = a; i < decoration.length; i++) {
+            decoration[i].style.display = "none";
+            decorationItemTabs[i].classList.remove("after_click");
+        }
+    }
 
+    function showDecoration(b) {
+        if (decoration[b].style.display = "none") {
+            decoration[b].style.display = "block";
+            decorationItemTabs[b].classList.add("after_click");
+        }
+    }
 
-
-
+    decorationSlider.addEventListener("click", function (event) {
+        let target = event.target;
+        while (target != this) {
+            if (target.classList.contains("no_click")) {
+                for (let i = 0; i < decorationItemTabs.length; i++) {
+                    if (target == decorationItemTabs[i]) {
+                        hideDecoration(0);
+                        showDecoration(i);
+                        break;
+                    }
+                }
+            }
+            target = target.parentNode;
+        }
+    });
 
 
 
