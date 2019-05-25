@@ -95,10 +95,40 @@ window.addEventListener("DOMContentLoaded", () => {
     }
     setTimer("timer", deadline);
 
+    //------------------TABs-----------------------------------------------------------------------------
+    let glazingSlider = document.querySelector(".glazing_slider"),
+        tabs = document.querySelectorAll(".glazing_block"),
+        glazing = document.querySelectorAll(".glazing .row");
 
+    function hide(cnt) {
+        for (let i = cnt; i < glazing.length; i++) {
+            glazing[i].style.display = "none";
+        }
+    }
 
+    function show(b) {
+        if (glazing[b].style.display = "none") {
+            glazing[b].style.display = "block";
+        }
+    }
 
+    glazingSlider.addEventListener("click", function (event) {
+        let target = event.target;
+        while (target != this) {
+            if (target.classList.contains("glazing_block")) {
+                for (let i = 0; i < tabs.length; i++) {
+                    if (target == tabs[i]) {
+                        hide(0);
+                        show(i);
+                        break;
+                    }
+                }
+            }
+            target = target.parentNode;
+        }
+    });
 
+   
 
 
 

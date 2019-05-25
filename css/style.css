@@ -368,6 +368,7 @@ textarea:focus {
 
 .glazing_block {
   display: inline-block;
+  outline: none;
 }
 
 .glazing_block img {
