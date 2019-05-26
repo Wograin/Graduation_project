@@ -131,11 +131,9 @@ window.addEventListener("DOMContentLoaded", () => {
 
     //------------------TABs 2-----------------------------------------------------------------------------
 
-    let decorationSlider = document.querySelector(".decoration_slider"),    
+    let decorationSlider = document.querySelector(".decoration_slider"),
         decorationItemTabs = document.querySelectorAll(".no_click"),
         decoration = document.querySelectorAll(".decoration .row .service");
-
-    console.log(decorationItemTabs);
 
     function hideDecoration(a) {
         for (let i = a; i < decoration.length; i++) {
@@ -167,10 +165,91 @@ window.addEventListener("DOMContentLoaded", () => {
         }
     });
 
+    //------------------Pictures-----------------------------------------------------------------------------
+    let divs = document.querySelectorAll(".works .row div"),
+        overlay = document.querySelector(".overlay"),
+        img = document.querySelectorAll(".works .row img.pa");
 
+    //console.log(img);
 
+    for (let i = 0; i < divs.length; i++) {
+        let div = divs[i];
+        //console.log(div);
+        div.addEventListener("click", (event) => {
+            event.preventDefault();
+            for (let j = 0; j < img.length; j++) {
+                overlay.style.display = "block";
+                //overlay.textContent = img[j].src;
+            }
+            //overlay.style.display = "block";
+            //overlay.innerHTML = '<img src="img/our_works/2.png" alt="" />';
+        });
+    }
 
+    //------------------FORMA-Modal-popup-----------------------------------------------------------------------------
 
+    let message = {
+        loading: "Загрузка",
+        success: "Спасибо! Скоро мы с Вами свзяжемся!",
+        failure: "Что-то пошло не так!"
+    };
+
+    let forms = document.querySelectorAll("form"),
+        inputs = document.querySelectorAll(".form input"),
+        statusMessage = document.createElement("div"),
+        allInputsUserPhone = document.querySelectorAll("input[name='user_phone']");
+
+    function setValidation(elem) {
+        for (let i = 0; i < elem.length; i++) {
+            elem[i].addEventListener("input", () => {
+                elem[i].value = elem[i].value.replace(/[^0-9]/ig, "");
+            });
+        }
+    }
+    setValidation(allInputsUserPhone);
+
+    statusMessage.classList.add("status");
+
+    function sendform(ourForm, ourInputs) {
+        for (let f = 0; f < ourForm.length; f++) {
+            let form = ourForm[f];
+
+            form.addEventListener("submit", (event) => {
+                event.preventDefault();
+                form.appendChild(statusMessage);
+
+                let request = new XMLHttpRequest();
+                request.open("POST", "server.php");
+                request.setRequestHeader("Content-Type", "application/json; charset=utf-8");
+
+                let formData = new FormData(form);
+                let obj = {};
+                formData.forEach(function (value, key) {
+                    obj[key] = value;
+                });
+
+                let json = JSON.stringify(obj);
+                request.send(json);
+
+                request.addEventListener("readystatechange", () => {
+                    if (request.readyState < 4) {
+                        statusMessage.innerHTML = message.loading;
+                    } else if (request.readyState === 4 && request.status == 200) {
+                        statusMessage.innerHTML = message.success;
+                    } else {
+                        statusMessage.innerHTML = message.failure;
+                    }
+                });
+                for (let i = 0; i < ourInputs.length; i++) {
+                    ourInputs[i].value = "";
+                }
+            }); // конец обработчика событий
+
+        } // конец цикла for f
+    }
+
+    sendform(forms, inputs);
+    
 
 
 
