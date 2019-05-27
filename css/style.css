@@ -849,10 +849,13 @@ textarea:focus {
 
 .myimage {
   position: fixed;
-  top: 0;
-  left: 0;
+  /*top: 0;*/
+  /*left: 0;*/
   width: 500px;
   height: 500px;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 10;
 }
 

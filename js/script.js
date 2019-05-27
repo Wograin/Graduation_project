@@ -166,25 +166,31 @@ window.addEventListener("DOMContentLoaded", () => {
     });
 
     //------------------Pictures-----------------------------------------------------------------------------
-    let divs = document.querySelectorAll(".works .row div"),
-        overlay = document.querySelector(".overlay"),
-        img = document.querySelectorAll(".works .row img.pa");
 
-    //console.log(img);
+    let images = document.querySelectorAll(".works img.pa"),
+        overlay = document.querySelector(".overlay");
 
-    for (let i = 0; i < divs.length; i++) {
-        let div = divs[i];
-        //console.log(div);
-        div.addEventListener("click", (event) => {
+    for (let i = 0; i < images.length; i++) {
+        let actual = images[i],
+            div = document.createElement("div"),
+            img = document.createElement("img");
+        img.setAttribute("src", images[i].getAttribute("src"));
+
+        actual.addEventListener("click", (event) => {
             event.preventDefault();
-            for (let j = 0; j < img.length; j++) {
-                overlay.style.display = "block";
-                //overlay.textContent = img[j].src;
-            }
-            //overlay.style.display = "block";
-            //overlay.innerHTML = '<img src="img/our_works/2.png" alt="" />';
+            overlay.style.display = "block";
+            overlay.appendChild(div).appendChild(img);
+            img.classList.add("myimage");
+            document.body.style.overflow = "hidden";
         });
     }
+
+    window.addEventListener("click", (event) => {
+        if (event.target === overlay) {
+            overlay.style.display = "none";
+            document.body.style.overflow = "";
+        }
+    });
 
     //------------------FORMA-Modal-popup-----------------------------------------------------------------------------
 
@@ -249,21 +255,119 @@ window.addEventListener("DOMContentLoaded", () => {
     }
 
     sendform(forms, inputs);
-    
+
+    //------------------Calc-----------------------------------------------------------------------------
+
+    //----------------------Modal-Calc------------------------------------------------
+
+    let glazingSection = document.querySelector(".glazing"),
+        popupCalc = document.querySelector(".popup_calc"),
+        popupCalcClose = popupCalc.querySelector(".popup_calc_close"),
+        popupCalcInputs = popupCalc.getElementsByTagName("input");
+
+    glazingSection.addEventListener("click", (event) => {
+        if (event.target && event.target.classList.contains("popup_calc_btn")) {
+            popupCalc.style.display = "block";
+            document.body.style.overflow = "hidden";
+        }
+    });
+
+    function setValidationCalc(inputs) {
+        for (let i = 0; i < inputs.length; i++) {
+            inputs[i].addEventListener("input", () => {
+                inputs[i].value = inputs[i].value.replace(/[^0-9]/ig, "");
+            });
+        }
+    }
+    setValidationCalc(popupCalcInputs);
+
+    popupCalcClose.addEventListener("click", () => {
+        popupCalc.style.display = "none";
+        document.body.style.overflow = "";
+    });
+
+    //----------------------Tabs-Calc------------------------------------------------
+
+    let popupCalcBalconIcons = popupCalc.querySelector(".balcon_icons"), // родитель картинок
+        smallPictures = popupCalc.querySelectorAll(".picture"), // маленькие картинки добавить класс do_image_more
+        bigPictures = popupCalc.querySelectorAll(".big_img img"); // больше картинки
+
+    function hidePictures(a) {
+        for (let i = a; i < bigPictures.length; i++) {
+            bigPictures[i].style.display = "none";
+            smallPictures[i].classList.remove("do_image_more");
+        }
+    }
+
+    function showPictures(b) {
+        if (bigPictures[b].style.display = "none") {
+            bigPictures[b].style.display = "inline-block";
+            smallPictures[b].classList.add("do_image_more");
+        }
+    }
+
+    popupCalcBalconIcons.addEventListener("click", (event) => {
+        let target = event.target;
+        if (target && target.classList.contains("picture")) {
+            for (let i = 0; i < smallPictures.length; i++) {
+                if (target == smallPictures[i]) {
+                    hidePictures(0);
+                    showPictures(i);
+                    break;
+                }
+            }
+        }
+    });
+
+    //----------------------Modal-Calc-Profile------------------------------------------------
+
+    let popupCalcButton = popupCalc.querySelector(".popup_calc_button"),
+        popupCalcProfile = document.querySelector(".popup_calc_profile"),
+        popupCalcProfileClose = document.querySelector(".popup_calc_profile_close"),
+        popupCalcContent = document.querySelector(".popup_calc_content");
 
 
+    /*Array.from(popupCalcProfileInput).forEach(function (check) { // нужно отобрать все инпуты
+            check.addEventListener('change', function (e) {
+              Array.from(popupCalcProfileInput).forEach(function (check) {
+                check.checked = false;
+              });
+              
+              e.target.checked = true;
+            });
+          });*/
 
+    popupCalcButton.addEventListener("click", () => {
 
+        let statusMessageInput = document.createElement("div");
+        statusMessageInput.classList.add("status");
 
+        if (popupCalcInputs[0].value == "" && popupCalcInputs[1].value == "") {
+            popupCalc.style.display = "block";
+            popupCalcContent.appendChild(statusMessageInput);
+            statusMessageInput.textContent = "Заполните все поля!";
+        } else {
+            popupCalcProfile.style.display = "block";
+            document.body.style.overflow = "hidden";
+            popupCalc.style.display = "none";
+        }
 
+    });
 
+    popupCalcProfileClose.addEventListener("click", () => {
+        popupCalcProfile.style.display = "none";
+        document.body.style.overflow = "";
+    });
 
+    document.getElementById('Check2').addEventListener('change', () => {
+        document.getElementById('Check1').checked = !document.getElementById('Check2').checked;
+    });
 
+    document.getElementById('Check1').addEventListener('change', () => {
+        document.getElementById('Check2').checked = !document.getElementById('Check1').checked;
+    });
 
-
-
-
-
+    //----------------------Modal-Calc-End------------------------------------------------
 
 
 
