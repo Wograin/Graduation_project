@@ -2,11 +2,9 @@ window.addEventListener("DOMContentLoaded", () => {
 
     "use strict";
 
-    //------------------MODAL WINDOW-----------------------------------------------------------------------------
-    let body = document.querySelector("body"),
-        popupEngineer = document.querySelector(".popup_engineer"),
-        popup = document.querySelector(".popup"),
-        btn = document.querySelectorAll("button.popup_close");
+    //------------------Close-----------------------------------------------------------------------------
+
+    let btn = document.querySelectorAll(".shutDown");
 
     function close(elem) {
         for (let i = 0; i < elem.length; i++) {
@@ -14,10 +12,33 @@ window.addEventListener("DOMContentLoaded", () => {
             cross.addEventListener("click", () => {
                 popupEngineer.style.display = "none";
                 popup.style.display = "none";
+                popupCalc.style.display = "none";
+                popupCalcProfile.style.display = "none";
+                popupCalcEnd.style.display = "none";
                 document.body.style.overflow = "";
             });
         }
     }
+    close(btn);
+
+    //------------------Validation-----------------------------------------------------------------------------
+
+    let allInputsUserPhone = document.querySelectorAll("input[name='user_phone']");
+
+    function setValidation(elem) {
+        for (let i = 0; i < elem.length; i++) {
+            elem[i].addEventListener("input", () => {
+                elem[i].value = elem[i].value.replace(/[^0-9]/ig, "");
+            });
+        }
+    }
+    setValidation(allInputsUserPhone);
+
+    //------------------MODAL WINDOW-----------------------------------------------------------------------------
+
+    let body = document.querySelector("body"),
+        popupEngineer = document.querySelector(".popup_engineer"),
+        popup = document.querySelector(".popup");
 
     body.addEventListener("click", (event) => {
         if (event.target && event.target.classList.contains("header_btn")) {
@@ -27,8 +48,6 @@ window.addEventListener("DOMContentLoaded", () => {
             event.preventDefault();
             popup.style.display = "block";
             document.body.style.overflow = "hidden";
-        } else {
-            close(btn);
         }
     });
 
@@ -206,17 +225,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
     let forms = document.querySelectorAll("form"),
         inputs = document.querySelectorAll(".form input"),
-        statusMessage = document.createElement("div"),
-        allInputsUserPhone = document.querySelectorAll("input[name='user_phone']");
-
-    function setValidation(elem) {
-        for (let i = 0; i < elem.length; i++) {
-            elem[i].addEventListener("input", () => {
-                elem[i].value = elem[i].value.replace(/[^0-9]/ig, "");
-            });
-        }
-    }
-    setValidation(allInputsUserPhone);
+        statusMessage = document.createElement("div");
 
     statusMessage.classList.add("status");
 
@@ -266,7 +275,6 @@ window.addEventListener("DOMContentLoaded", () => {
 
     let glazingSection = document.querySelector(".glazing"),
         popupCalc = document.querySelector(".popup_calc"),
-        popupCalcClose = popupCalc.querySelector(".popup_calc_close"),
         popupCalcInputs = popupCalc.getElementsByTagName("input");
 
     glazingSection.addEventListener("click", (event) => {
@@ -284,11 +292,6 @@ window.addEventListener("DOMContentLoaded", () => {
         }
     }
     setValidationCalc(popupCalcInputs);
-
-    popupCalcClose.addEventListener("click", () => {
-        popupCalc.style.display = "none";
-        document.body.style.overflow = "";
-    });
 
     //----------------------Tabs-Calc------------------------------------------------
 
@@ -327,20 +330,20 @@ window.addEventListener("DOMContentLoaded", () => {
 
     let popupCalcButton = popupCalc.querySelector(".popup_calc_button"),
         popupCalcProfile = document.querySelector(".popup_calc_profile"),
-        popupCalcProfileClose = document.querySelector(".popup_calc_profile_close"),
-        popupCalcContent = document.querySelector(".popup_calc_content");
-
-
-    /*Array.from(popupCalcProfileInput).forEach(function (check) { // нужно отобрать все инпуты
+        popupCalcContent = document.querySelector(".popup_calc_content"),
+        popupCalcProfileButton = document.querySelector(".popup_calc_profile_button"),
+        popupCalcEnd = document.querySelector(".popup_calc_end");
+    /*
+        Array.from(popupCalcProfileInput).forEach(function (check) { // нужно отобрать все инпуты
             check.addEventListener('change', function (e) {
-              Array.from(popupCalcProfileInput).forEach(function (check) {
-                check.checked = false;
-              });
-              
-              e.target.checked = true;
-            });
-          });*/
+                Array.from(popupCalcProfileInput).forEach(function (check) {
+                    check.checked = false;
+                });
 
+                e.target.checked = true;
+            });
+        });
+    */
     popupCalcButton.addEventListener("click", () => {
 
         let statusMessageInput = document.createElement("div");
@@ -358,11 +361,6 @@ window.addEventListener("DOMContentLoaded", () => {
 
     });
 
-    popupCalcProfileClose.addEventListener("click", () => {
-        popupCalcProfile.style.display = "none";
-        document.body.style.overflow = "";
-    });
-
     document.getElementById('Check2').addEventListener('change', () => {
         document.getElementById('Check1').checked = !document.getElementById('Check2').checked;
     });
@@ -371,12 +369,33 @@ window.addEventListener("DOMContentLoaded", () => {
         document.getElementById('Check2').checked = !document.getElementById('Check1').checked;
     });
 
-    //----------------------Modal-Calc-End------------------------------------------------
+    popupCalcProfileButton.addEventListener("click", () => {
+        popupCalcProfile.style.display = "none";
+        popupCalcEnd.style.display = "block";
+    });
 
+    //----------------------Modal-Window-after-60-sec------------------------------------------------
 
+    function stealInSixtySeconds() {
+        let popup = document.querySelector(".popup"),
+            popupEngineer = document.querySelector(".popup_engineer"),
+            popupCalc = document.querySelector(".popup_calc");
 
+        let callModalWindow = setTimeout(sixtySeconds, 60000);
 
-
-
+        function sixtySeconds() {
+            if (popup.style.display == "none" && popupEngineer.style.display == "none" && popupCalc.style.display == "none") {
+                clearTimeout(callModalWindow);
+            } else {
+                popup.style.display = "block";
+            }
+            /*setTimeout(function () {
+                if (popup.style.display != 'block' && popupEngineer.style.display != 'block' && popupCalc.style.display != 'block') {
+                    popup.style.display = 'block';
+                }
+            }, 3000);*/
+        }
+    }
+    stealInSixtySeconds();
 
 });
