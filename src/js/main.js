@@ -257,8 +257,10 @@ function sendform(ourForm, ourInputs, object) {
             });
 
             let json = JSON.stringify(obj);
-            request.send(JSON.stringify(object));
             request.send(json);
+            let json1 = JSON.stringify(object);
+            //request.send(JSON.stringify(object));
+            request.send(json1);
             
             request.addEventListener("readystatechange", () => {
                 if (request.readyState < 4) {

@@ -1,4 +1,12 @@
 function calc() {
+    let calculateTheCost = {
+        balconyShape: "",
+        width: "",
+        height: "",
+        glazingType: "",
+        profile: ""
+    };
+
     let popupCalc = document.querySelector(".popup_calc"),
         popupCalcInputs = popupCalc.getElementsByTagName("input");
 
@@ -23,6 +31,7 @@ function calc() {
     let popupCalcBalconIcons = popupCalc.querySelector(".balcon_icons"), // родитель картинок
         smallPictures = popupCalc.querySelectorAll(".picture"), // маленькие картинки добавить класс do_image_more
         bigPictures = popupCalc.querySelectorAll(".big_img img"); // больше картинки
+    calculateTheCost.balconyShape = smallPictures[0].src; // картинка по умолчанию если она не выбрана пользователем
 
     function hidePictures(a) {
         for (let i = a; i < bigPictures.length; i++) {
@@ -45,6 +54,7 @@ function calc() {
                 if (target == smallPictures[i]) {
                     hidePictures(0);
                     showPictures(i);
+                    calculateTheCost.balconyShape = smallPictures[i].src;
                     break;
                 }
             }
@@ -75,7 +85,7 @@ function calc() {
         let statusMessageInput = document.createElement("div");
         statusMessageInput.classList.add("status");
 
-        if (popupCalcInputs[0].value == "" && popupCalcInputs[1].value == "") {
+        if (popupCalcInputs[0].value == "" || popupCalcInputs[1].value == "") {
             popupCalc.style.display = "block";
             popupCalcContent.appendChild(statusMessageInput);
             statusMessageInput.textContent = "Заполните все поля!";
@@ -83,6 +93,8 @@ function calc() {
             popupCalcProfile.style.display = "block";
             document.body.style.overflow = "hidden";
             popupCalc.style.display = "none";
+            calculateTheCost.width = popupCalcInputs[0].value;
+            calculateTheCost.height = popupCalcInputs[1].value;
         }
 
     });
@@ -96,8 +108,22 @@ function calc() {
     });
 
     popupCalcProfileButton.addEventListener("click", () => {
-        popupCalcProfile.style.display = "none";
-        popupCalcEnd.style.display = "block";
+        let options = document.getElementsByTagName("option"),
+            checkbox = document.querySelectorAll(".checkbox");
+
+        for (let i = 0; i < checkbox.length; i++) {
+            if (checkbox[i].checked) {
+                calculateTheCost.profile = checkbox[i].alt;
+            }
+        }
+
+        for (let i = 0; i < options.length; i++) {
+            if (options[i].selected) {
+                calculateTheCost.glazingType = options[i].value;
+            }
+            popupCalcProfile.style.display = "none";
+            popupCalcEnd.style.display = "block";
+        }
     });
 
     function close(elem) {
