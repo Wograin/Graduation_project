@@ -126,6 +126,7 @@ module.exports = stealInSixtySeconds;
 /***/ (function(module, exports) {
 
 function calc() {
+
     let popupCalc = document.querySelector(".popup_calc"),
         popupCalcInputs = popupCalc.getElementsByTagName("input");
 
@@ -150,6 +151,7 @@ function calc() {
     let popupCalcBalconIcons = popupCalc.querySelector(".balcon_icons"), // родитель картинок
         smallPictures = popupCalc.querySelectorAll(".picture"), // маленькие картинки добавить класс do_image_more
         bigPictures = popupCalc.querySelectorAll(".big_img img"); // больше картинки
+    calculateTheCost.balconyShape = smallPictures[0].src; // картинка по умолчанию если она не выбрана пользователем
 
     function hidePictures(a) {
         for (let i = a; i < bigPictures.length; i++) {
@@ -172,6 +174,7 @@ function calc() {
                 if (target == smallPictures[i]) {
                     hidePictures(0);
                     showPictures(i);
+                    calculateTheCost.balconyShape = smallPictures[i].src;
                     break;
                 }
             }
@@ -202,7 +205,7 @@ function calc() {
         let statusMessageInput = document.createElement("div");
         statusMessageInput.classList.add("status");
 
-        if (popupCalcInputs[0].value == "" && popupCalcInputs[1].value == "") {
+        if (popupCalcInputs[0].value == "" || popupCalcInputs[1].value == "") {
             popupCalc.style.display = "block";
             popupCalcContent.appendChild(statusMessageInput);
             statusMessageInput.textContent = "Заполните все поля!";
@@ -210,6 +213,8 @@ function calc() {
             popupCalcProfile.style.display = "block";
             document.body.style.overflow = "hidden";
             popupCalc.style.display = "none";
+            calculateTheCost.width = popupCalcInputs[0].value;
+            calculateTheCost.height = popupCalcInputs[1].value;
         }
 
     });
@@ -223,8 +228,22 @@ function calc() {
     });
 
     popupCalcProfileButton.addEventListener("click", () => {
-        popupCalcProfile.style.display = "none";
-        popupCalcEnd.style.display = "block";
+        let options = document.getElementsByTagName("option"),
+            checkbox = document.querySelectorAll(".checkbox");
+
+        for (let i = 0; i < checkbox.length; i++) {
+            if (checkbox[i].checked) {
+                calculateTheCost.profile = checkbox[i].alt;
+            }
+        }
+
+        for (let i = 0; i < options.length; i++) {
+            if (options[i].selected) {
+                calculateTheCost.glazingType = options[i].value;
+            }
+            popupCalcProfile.style.display = "none";
+            popupCalcEnd.style.display = "block";
+        }
     });
 
     function close(elem) {
@@ -308,11 +327,12 @@ function form() {
 
     let forms = document.querySelectorAll("form"),
         inputs = document.querySelectorAll(".form input"),
-        statusMessage = document.createElement("div");
+        statusMessage = document.createElement("div"),
+        popupCalc = document.querySelector(".popup_calc");
 
     statusMessage.classList.add("status");
 
-    function sendform(ourForm, ourInputs) {
+    function sendform(ourForm, ourInputs, globalObject) {
         for (let f = 0; f < ourForm.length; f++) {
             let form = ourForm[f];
 
@@ -331,7 +351,15 @@ function form() {
                 });
 
                 let json = JSON.stringify(obj);
-                request.send(json);
+
+                if(popupCalc.style.display = "block"){
+                    request.send(JSON.stringify(globalObject));
+                } else{
+                    request.send(json);
+                }
+
+               //let json = JSON.stringify(obj);
+               //request.send(json);
 
                 request.addEventListener("readystatechange", () => {
                     if (request.readyState < 4) {
@@ -350,7 +378,7 @@ function form() {
         } // конец цикла for f
     }
 
-    sendform(forms, inputs);
+    sendform(forms, inputs, calculateTheCost);
 }
 
 module.exports = form;
@@ -593,6 +621,14 @@ module.exports = validation;
 window.addEventListener("DOMContentLoaded", () => {
 
     "use strict";
+
+    window.calculateTheCost = {
+        balconyShape: "",
+        width: "",
+        height: "",
+        glazingType: "",
+        profile: ""
+    };
 
     let afterSixtySeconds = __webpack_require__(/*! ./parts/afterSixtySeconds.js */ "./src/js/parts/afterSixtySeconds.js"),
         calc = __webpack_require__(/*! ./parts/calc.js */ "./src/js/parts/calc.js"),
