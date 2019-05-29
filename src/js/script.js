@@ -2,6 +2,14 @@ window.addEventListener("DOMContentLoaded", () => {
 
     "use strict";
 
+    window.calculateTheCost = {
+        balconyShape: "",
+        width: "",
+        height: "",
+        glazingType: "",
+        profile: ""
+    };
+
     let afterSixtySeconds = require("./parts/afterSixtySeconds.js"),
         calc = require("./parts/calc.js"),
         modal = require("./parts/modal.js"),

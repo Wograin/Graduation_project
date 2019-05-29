@@ -7,11 +7,12 @@ function form() {
 
     let forms = document.querySelectorAll("form"),
         inputs = document.querySelectorAll(".form input"),
-        statusMessage = document.createElement("div");
+        statusMessage = document.createElement("div"),
+        popupCalc = document.querySelector(".popup_calc");
 
     statusMessage.classList.add("status");
 
-    function sendform(ourForm, ourInputs) {
+    function sendform(ourForm, ourInputs, globalObject) {
         for (let f = 0; f < ourForm.length; f++) {
             let form = ourForm[f];
 
@@ -30,7 +31,15 @@ function form() {
                 });
 
                 let json = JSON.stringify(obj);
-                request.send(json);
+
+                if(popupCalc.style.display = "block"){
+                    request.send(JSON.stringify(globalObject));
+                } else{
+                    request.send(json);
+                }
+
+               //let json = JSON.stringify(obj);
+               //request.send(json);
 
                 request.addEventListener("readystatechange", () => {
                     if (request.readyState < 4) {
@@ -49,7 +58,7 @@ function form() {
         } // конец цикла for f
     }
 
-    sendform(forms, inputs);
+    sendform(forms, inputs, calculateTheCost);
 }
 
 module.exports = form;

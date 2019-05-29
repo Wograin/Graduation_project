@@ -1,11 +1,4 @@
 function calc() {
-    let calculateTheCost = {
-        balconyShape: "",
-        width: "",
-        height: "",
-        glazingType: "",
-        profile: ""
-    };
 
     let popupCalc = document.querySelector(".popup_calc"),
         popupCalcInputs = popupCalc.getElementsByTagName("input");
