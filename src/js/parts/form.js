@@ -32,14 +32,14 @@ function form() {
 
                 let json = JSON.stringify(obj);
 
-                if(popupCalc.style.display = "block"){
-                    request.send(JSON.stringify(globalObject));
-                } else{
+                if (Object.keys(globalObject).length == 1) {
                     request.send(json);
+                } else {
+                    request.send(JSON.stringify(globalObject));
+                    // Object.getOwnPropertyNames(calculateTheCost).forEach(function (prop) {
+                    //     delete calculateTheCost[prop];
+                    // });
                 }
-
-               //let json = JSON.stringify(obj);
-               //request.send(json);
 
                 request.addEventListener("readystatechange", () => {
                     if (request.readyState < 4) {

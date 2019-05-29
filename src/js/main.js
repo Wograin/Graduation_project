@@ -2,6 +2,14 @@
 
 "use strict";
 
+window.calculateTheCost = {
+    // balconyShape: "",
+    // width: "",
+    // height: "",
+    // glazingType: "",
+    // profile: ""
+};
+
 //------------------Close-----------------------------------------------------------------------------
 
 let btn = document.querySelectorAll(".shutDown");
@@ -127,7 +135,7 @@ function hide(a) {
 }
 
 function show(b) {
-    if (glazing[b].style.display = "none") {
+    if (glazing[b].style.display == "none") {
         glazing[b].style.display = "block";
     }
 }
@@ -162,7 +170,7 @@ function hideDecoration(a) {
 }
 
 function showDecoration(b) {
-    if (decoration[b].style.display = "none") {
+    if (decoration[b].style.display == "none") {
         decoration[b].style.display = "block";
         decorationItemTabs[b].classList.add("after_click");
     }
@@ -223,14 +231,6 @@ let message = {
     failure: "Что-то пошло не так!"
 };
 
-let calculateTheCost = {
-    balconyShape: "",
-    width: "",
-    height: "",
-    glazingType: "",
-    profile: ""
-};
-
 
 let forms = document.querySelectorAll("form"),
     inputs = document.querySelectorAll(".form input"),
@@ -238,7 +238,7 @@ let forms = document.querySelectorAll("form"),
 
 statusMessage.classList.add("status");
 
-function sendform(ourForm, ourInputs, object) {
+function sendform(ourForm, ourInputs, globalObject) {
     for (let f = 0; f < ourForm.length; f++) {
         let form = ourForm[f];
 
@@ -257,11 +257,16 @@ function sendform(ourForm, ourInputs, object) {
             });
 
             let json = JSON.stringify(obj);
-            request.send(json);
-            let json1 = JSON.stringify(object);
-            //request.send(JSON.stringify(object));
-            request.send(json1);
-            
+
+            if (Object.keys(globalObject).length == 1) {
+                request.send(json);
+            } else {
+                request.send(JSON.stringify(globalObject));
+                // Object.getOwnPropertyNames(calculateTheCost).forEach(function (prop) {
+                //     delete calculateTheCost[prop];
+                // });
+            }
+
             request.addEventListener("readystatechange", () => {
                 if (request.readyState < 4) {
                     statusMessage.innerHTML = message.loading;
@@ -284,13 +289,6 @@ sendform(forms, inputs, calculateTheCost);
 //------------------Calc-----------------------------------------------------------------------------
 
 //----------------------Modal-Calc------------------------------------------------
-// let calculateTheCost = {
-//     balconyShape: "",
-//     width: "",
-//     height: "",
-//     glazingType: "",
-//     profile: ""
-// };
 
 let glazingSection = document.querySelector(".glazing"),
     popupCalc = document.querySelector(".popup_calc"),
@@ -317,6 +315,7 @@ setValidationCalc(popupCalcInputs);
 let popupCalcBalconIcons = popupCalc.querySelector(".balcon_icons"), // родитель картинок
     smallPictures = popupCalc.querySelectorAll(".picture"), // маленькие картинки добавить класс do_image_more
     bigPictures = popupCalc.querySelectorAll(".big_img img"); // больше картинки
+
 calculateTheCost.balconyShape = smallPictures[0].src; // картинка по умолчанию если она не выбрана пользователем
 
 function hidePictures(a) {
@@ -327,7 +326,7 @@ function hidePictures(a) {
 }
 
 function showPictures(b) {
-    if (bigPictures[b].style.display = "none") {
+    if (bigPictures[b].style.display == "none") {
         bigPictures[b].style.display = "inline-block";
         smallPictures[b].classList.add("do_image_more");
     }
@@ -366,6 +365,7 @@ let popupCalcButton = popupCalc.querySelector(".popup_calc_button"),
         });
     });
 */
+
 popupCalcButton.addEventListener("click", () => {
 
     let statusMessageInput = document.createElement("div");
@@ -381,6 +381,12 @@ popupCalcButton.addEventListener("click", () => {
         popupCalc.style.display = "none";
         calculateTheCost.width = popupCalcInputs[0].value;
         calculateTheCost.height = popupCalcInputs[1].value;
+    }
+
+    for (let i = 0; i < popupCalcInputs.length; i++) {
+        popupCalcInputs[i].value = "";
+        hidePictures(0);
+        showPictures(0);
     }
 
 });
@@ -400,7 +406,7 @@ popupCalcProfileButton.addEventListener("click", () => {
     for (let i = 0; i < checkbox.length; i++) {
         if (checkbox[i].checked) {
             calculateTheCost.profile = checkbox[i].alt;
-        }
+        } 
     }
 
     for (let i = 0; i < options.length; i++) {

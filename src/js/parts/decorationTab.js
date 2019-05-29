@@ -11,7 +11,7 @@ function decorationTab() {
     }
 
     function showDecoration(b) {
-        if (decoration[b].style.display = "none") {
+        if (decoration[b].style.display == "none") {
             decoration[b].style.display = "block";
             decorationItemTabs[b].classList.add("after_click");
         }

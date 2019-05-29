@@ -24,6 +24,7 @@ function calc() {
     let popupCalcBalconIcons = popupCalc.querySelector(".balcon_icons"), // родитель картинок
         smallPictures = popupCalc.querySelectorAll(".picture"), // маленькие картинки добавить класс do_image_more
         bigPictures = popupCalc.querySelectorAll(".big_img img"); // больше картинки
+
     calculateTheCost.balconyShape = smallPictures[0].src; // картинка по умолчанию если она не выбрана пользователем
 
     function hidePictures(a) {
@@ -34,7 +35,7 @@ function calc() {
     }
 
     function showPictures(b) {
-        if (bigPictures[b].style.display = "none") {
+        if (bigPictures[b].style.display == "none") {
             bigPictures[b].style.display = "inline-block";
             smallPictures[b].classList.add("do_image_more");
         }
@@ -88,6 +89,12 @@ function calc() {
             popupCalc.style.display = "none";
             calculateTheCost.width = popupCalcInputs[0].value;
             calculateTheCost.height = popupCalcInputs[1].value;
+        }
+
+        for (let i = 0; i < popupCalcInputs.length; i++) {
+            popupCalcInputs[i].value = "";
+            hidePictures(0);
+            showPictures(0);
         }
 
     });

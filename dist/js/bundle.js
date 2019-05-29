@@ -151,6 +151,7 @@ function calc() {
     let popupCalcBalconIcons = popupCalc.querySelector(".balcon_icons"), // родитель картинок
         smallPictures = popupCalc.querySelectorAll(".picture"), // маленькие картинки добавить класс do_image_more
         bigPictures = popupCalc.querySelectorAll(".big_img img"); // больше картинки
+
     calculateTheCost.balconyShape = smallPictures[0].src; // картинка по умолчанию если она не выбрана пользователем
 
     function hidePictures(a) {
@@ -161,7 +162,7 @@ function calc() {
     }
 
     function showPictures(b) {
-        if (bigPictures[b].style.display = "none") {
+        if (bigPictures[b].style.display == "none") {
             bigPictures[b].style.display = "inline-block";
             smallPictures[b].classList.add("do_image_more");
         }
@@ -215,6 +216,12 @@ function calc() {
             popupCalc.style.display = "none";
             calculateTheCost.width = popupCalcInputs[0].value;
             calculateTheCost.height = popupCalcInputs[1].value;
+        }
+
+        for (let i = 0; i < popupCalcInputs.length; i++) {
+            popupCalcInputs[i].value = "";
+            hidePictures(0);
+            showPictures(0);
         }
 
     });
@@ -284,7 +291,7 @@ function decorationTab() {
     }
 
     function showDecoration(b) {
-        if (decoration[b].style.display = "none") {
+        if (decoration[b].style.display == "none") {
             decoration[b].style.display = "block";
             decorationItemTabs[b].classList.add("after_click");
         }
@@ -352,14 +359,14 @@ function form() {
 
                 let json = JSON.stringify(obj);
 
-                if(popupCalc.style.display = "block"){
-                    request.send(JSON.stringify(globalObject));
-                } else{
+                if (Object.keys(globalObject).length == 1) {
                     request.send(json);
+                } else {
+                    request.send(JSON.stringify(globalObject));
+                    // Object.getOwnPropertyNames(calculateTheCost).forEach(function (prop) {
+                    //     delete calculateTheCost[prop];
+                    // });
                 }
-
-               //let json = JSON.stringify(obj);
-               //request.send(json);
 
                 request.addEventListener("readystatechange", () => {
                     if (request.readyState < 4) {
@@ -404,7 +411,7 @@ function glazingTab() {
     }
 
     function show(b) {
-        if (glazing[b].style.display = "none") {
+        if (glazing[b].style.display == "none") {
             glazing[b].style.display = "block";
         }
     }
@@ -622,13 +629,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
     "use strict";
 
-    window.calculateTheCost = {
-        balconyShape: "",
-        width: "",
-        height: "",
-        glazingType: "",
-        profile: ""
-    };
+    window.calculateTheCost = {};
 
     let afterSixtySeconds = __webpack_require__(/*! ./parts/afterSixtySeconds.js */ "./src/js/parts/afterSixtySeconds.js"),
         calc = __webpack_require__(/*! ./parts/calc.js */ "./src/js/parts/calc.js"),

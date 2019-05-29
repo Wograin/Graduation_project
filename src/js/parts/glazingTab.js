@@ -10,7 +10,7 @@ function glazingTab() {
     }
 
     function show(b) {
-        if (glazing[b].style.display = "none") {
+        if (glazing[b].style.display == "none") {
             glazing[b].style.display = "block";
         }
     }
